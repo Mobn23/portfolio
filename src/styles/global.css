@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-dark-900 text-gray-200 font-sans;
+    overflow-x: hidden;
+  }
+  ::selection { @apply bg-accent-500/30 text-white; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { @apply bg-dark-900; }
+  ::-webkit-scrollbar-thumb { @apply bg-accent-500/40 rounded-full; }
+}
+
+@layer components {
+  .section-container { @apply max-w-6xl mx-auto px-6 py-20; }
+  .gradient-text { @apply bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 bg-clip-text text-transparent; }
+  .glass { @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl; }
+  .glow-border { @apply border border-accent-500/30 hover:border-accent-400/60 transition-all duration-500; }
+  .tag { @apply px-3 py-1 text-xs font-mono rounded-full bg-accent-500/10 text-accent-400 border border-accent-500/20; }
+}
+
+/* Animated gradient background orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-1 { width: 600px; height: 600px; background: #8b5cf6; top: -200px; left: -200px; animation: float 8s ease-in-out infinite; }
+.orb-2 { width: 500px; height: 500px; background: #3b82f6; bottom: -150px; right: -150px; animation: float 10s ease-in-out infinite reverse; }
+.orb-3 { width: 400px; height: 400px; background: #06b6d4; top: 50%; left: 50%; animation: float 12s ease-in-out infinite; }
+
+/* Intersection observer animations */
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Particle canvas */
+#particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(3deg); }
+}

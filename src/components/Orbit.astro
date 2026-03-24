@@ -1,0 +1,61 @@
+---
+import type { Lang } from '../i18n/translations';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const title = lang === 'sv' ? 'Teknik-universum' : 'Tech Universe';
+
+const orbits = [
+  { radius: 80, speed: 20, items: ['Docker', 'Python', 'K8s'] },
+  { radius: 140, speed: 30, items: ['React', 'CI/CD', 'OWASP', 'Flask'] },
+  { radius: 200, speed: 45, items: ['Azure', 'GraphQL', 'Jenkins', 'MongoDB', 'LLM', 'MySQL'] },
+];
+---
+<section class="section-container">
+  <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center reveal">
+    <span class="gradient-text">{title}</span>
+  </h2>
+  <div class="flex justify-center reveal">
+    <div class="relative w-[420px] h-[420px]" id="orbit-container">
+      <!-- Orbit rings -->
+      {orbits.map(o => (
+        <div class="absolute rounded-full border border-white/5 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={`width:${o.radius*2}px;height:${o.radius*2}px`}></div>
+      ))}
+      <!-- Center -->
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-accent-500/40 z-10 animate-glow">
+        MB
+      </div>
+      <!-- Orbiting items -->
+      {orbits.map(o =>
+        o.items.map((item, i) => (
+          <div
+            class="orbit-item absolute left-1/2 top-1/2"
+            data-radius={o.radius}
+            data-speed={o.speed}
+            data-offset={(360 / o.items.length) * i}
+          >
+            <span class="block -translate-x-1/2 -translate-y-1/2 px-3 py-1.5 text-xs font-mono rounded-full bg-white/5 border border-white/10 text-gray-300 whitespace-nowrap hover:bg-accent-500/20 hover:text-white hover:border-accent-500/40 transition-all cursor-default">
+              {item}
+            </span>
+          </div>
+        ))
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  const items = document.querySelectorAll('.orbit-item') as NodeListOf<HTMLElement>;
+  let time = 0;
+  function animate() {
+    time += 0.016;
+    items.forEach(el => {
+      const r = parseFloat(el.dataset.radius || '0');
+      const speed = parseFloat(el.dataset.speed || '0');
+      const offset = parseFloat(el.dataset.offset || '0');
+      const angle = (time * (360 / speed) + offset) * (Math.PI / 180);
+      el.style.transform = `translate(${Math.cos(angle) * r}px, ${Math.sin(angle) * r}px)`;
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>

@@ -1,0 +1,28 @@
+---
+import type { Lang } from '../i18n/translations';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+
+const items = [
+  { emoji: '💼', label: lang === 'sv' ? 'Roll' : 'Role', value: lang === 'sv' ? 'Software Engineer (Praktikant) & Examensarbete @ Ericsson' : 'Software Engineer (Intern) & Thesis @ Ericsson' },
+  { emoji: '♟️', label: lang === 'sv' ? 'Spelar' : 'Playing', value: 'Chess' },
+  { emoji: '🎵', label: lang === 'sv' ? 'Lyssnar på' : 'Listening to', value: 'Techno' },
+  { emoji: '📖', label: lang === 'sv' ? 'Lär mig' : 'Learning', value: 'AI Agents & MCP' },
+  { emoji: '📍', label: lang === 'sv' ? 'Baserad i' : 'Based in', value: 'Karlskrona 🇸🇪' },
+  { emoji: '🟢', label: lang === 'sv' ? 'Öppen för' : 'Open to', value: lang === 'sv' ? 'Sommarjobb 2026' : 'Summer 2026 opportunities' },
+];
+---
+<section class="section-container">
+  <div class="glass glow-border max-w-2xl mx-auto p-6 reveal">
+    <h3 class="text-sm font-mono text-gray-500 mb-4">{lang === 'sv' ? '// just nu' : '// currently'}</h3>
+    <div class="space-y-3">
+      {items.map((item, idx) => (
+        <div class="flex items-center gap-3 text-sm reveal" style={`animation-delay:${idx * 0.08}s`}>
+          <span class="text-lg">{item.emoji}</span>
+          <span class="text-gray-500 w-24 shrink-0">{item.label}</span>
+          <span class="text-white font-medium">{item.value}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
