@@ -1,0 +1,224 @@
+\documentclass[10pt, letterpaper]{article}
+
+\usepackage[
+    ignoreheadfoot,
+    top=1.5 cm,
+    bottom=1.5 cm,
+    left=1.5 cm,
+    right=1.5 cm,
+    footskip=1.0 cm,
+]{geometry}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primaryColor}{RGB}{0, 0, 0}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage{amsmath}
+\usepackage[
+    pdftitle={Mohamed Bnshi - Software Engineer},
+    pdfauthor={Mohamed Bnshi},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref}
+\usepackage[pscoord]{eso-pic}
+\usepackage{calc}
+\usepackage{bookmark}
+\usepackage{lastpage}
+\usepackage{changepage}
+\usepackage{paracol}
+\usepackage{ifthen}
+\usepackage{needspace}
+\usepackage{iftex}
+
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt}
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\columnsep}{0.15cm}
+\pagenumbering{gobble}
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+\titlespacing{\section}{-1pt}{0.3cm}{0.2cm}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$}
+\newenvironment{highlights}{
+    \begin{itemize}[topsep=0.10cm, parsep=0.10cm, partopsep=0pt, itemsep=0pt, leftmargin=10pt]
+}{
+    \end{itemize}
+}
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{0cm}{0cm}
+}{
+    \end{adjustwidth}
+}
+
+\let\hrefWithoutArrow\href
+
+\begin{document}
+
+    % ===== HEADER =====
+    \begin{center}
+        {\fontsize{25pt}{25pt}\selectfont Mohamed Bnshi}
+
+        \vspace{5pt}
+
+        \normalsize
+        Karlskrona \quad
+        \hrefWithoutArrow{mailto:mohamedbnshi@gmail.com}{mohamedbnshi@gmail.com} \quad
+        079-018 44 41 \quad
+        \hrefWithoutArrow{https://www.linkedin.com/in/mohamedbnshi/}{LinkedIn} \quad
+        \hrefWithoutArrow{https://github.com/Mobn23/}{GitHub} \quad
+        \hrefWithoutArrow{https://portfolio-delta-virid-21.vercel.app/}{Portfolio}
+    \end{center}
+
+    % ===== PROFIL =====
+    \section{Profil}
+    \begin{onecolentry}
+        Programvaruutvecklare med erfarenhet av fullstack-utveckling, DevOps och AI-drivna system. Arbetar med CI/CD, containerisering och LLM-baserade agenter i industriell miljö genom samarbete med Ericsson. Stark grund inom säker mjukvaruutveckling och DevSecOps. Söker roll inom Software Engineering, fullstack-utveckling, DevOps eller IT-konsulting.
+    \end{onecolentry}
+
+    % ===== KOMPETENSÖVERSIKT =====
+    \section{Kompetensöversikt}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Fullstack-utveckling (React, Node.js, Python, Flask, PHP)
+            \item DevOps \& CI/CD (Docker, Kubernetes, GitHub Actions, Azure DevOps, Ansible)
+            \item AI-drivna system och automatisering (LLM, AI-agenter, MCP)
+            \item Säker mjukvaruutveckling \& DevSecOps (OWASP, sårbarhetsanalys, threat modeling)
+        \end{highlights}
+    \end{onecolentry}
+
+    % ===== UTBILDNING =====
+    \section{Utbildning}
+    \begin{onecolentry}
+        \textbf{Blekinge Tekniska Högskola (BTH) | Karlskrona} \\
+        Kandidatexamen i Programvaruteknik (Webbprogrammering, 180 hp) | Pågående (Termin 6)
+        \begin{highlights}
+            \item Huvudområde: Programvaruteknik
+            \item Fokus: Fullstack-utveckling, Systemarkitektur och Databasteknik
+        \end{highlights}
+        Examen: Augusti 2026 | Tillgänglig: Sommar 2026
+    \end{onecolentry}
+
+    % ===== TEKNISKA FÄRDIGHETER =====
+    \section{Tekniska Färdigheter}
+    \begin{onecolentry}
+        \textbf{Programspråk:} JavaScript, TypeScript, Python, PHP, SQL, Bash \\[0.15cm]
+        \textbf{Ramverk \& Bibliotek:} React, Node.js, Express.js, Flask, Symfony 7, Astro, Tailwind CSS, Web Components \\[0.15cm]
+        \textbf{Databaser:} MySQL, PostgreSQL, SQLite, MongoDB \\[0.15cm]
+        \textbf{APIer:} RESTful APIs, GraphQL \\[0.15cm]
+        \textbf{ORM/ODM:} Doctrine (PHP), Mongoose (MongoDB) \\[0.15cm]
+        \textbf{DevOps \& Verktyg:} Docker, Kubernetes, Azure DevOps, GitHub Actions, Jenkins, Gerrit, Ansible, Git, Linux/Unix \\[0.15cm]
+        \textbf{Säkerhet:} OWASP, sårbarhetsanalys (CVE, CVSS), SBOM, threat modeling, container-scanning \\[0.15cm]
+        \textbf{Regelverk:} GDPR-medveten utveckling och hantering av känslig data
+    \end{onecolentry}
+
+    % ===== AKADEMISKT SAMARBETE =====
+    \section{Akademiskt Samarbete}
+
+    \begin{onecolentry}
+        \textbf{Ericsson--BTH | Software Engineer (Intern) -- AI-driven Systems} \hfill \textit{Pågående}
+        \begin{highlights}
+            \item Designar och implementerar MCP-servrar för att tillhandahålla kontextuell data till LLM-baserade agenter
+            \item Utvecklar MCP-klienter som möjliggör återanvändbara och skalbara AI-drivna arbetsflöden
+            \item Designar automatiserade feedback-loopar som analyserar CI-fel och genererar korrigerande Gerrit-patchar, vilket minskar manuellt felsökningsarbete
+            \item Containeriserar agenttjänster och testmiljöer med Docker och Kubernetes för tillförlitlighet och reproducerbarhet
+            \item Bidrar till att bygga robusta och återanvändbara AI-drivna automationssystem i enterprise-miljöer med fokus på skalbarhet, tillförlitlighet och minskat manuellt arbete
+        \end{highlights}
+        \textbf{Tekniker:} MCP, LLM-integration, AI-agenter, Event-Driven Architecture, Docker, Kubernetes, CI/CD, Gerrit, Jenkins
+    \end{onecolentry}
+
+    \vspace{0.3cm}
+
+    \begin{onecolentry}
+        \textbf{Examensarbete | BTH i samarbete med Ericsson} \hfill \textit{Pågående} \\
+        Operationalisering av kontextmedveten sårbarhetsanalys i CI/CD-pipelines inom DevSecOps
+        \begin{highlights}
+            \item Utvecklar proof-of-concept för kontextmedveten sårbarhetsprioritering i automatiserade CI/CD-pipelines
+            \item Aggregerar och normaliserar resultat från sårbarhetsskannrar till enhetligt format med deduplicering
+            \item Analyserar och prioriterar sårbarheter baserat på systemkontext (exponering, säkerhetskontroller, hotmodellering)
+            \item Genomförs i samarbete med Ericsson i industriell miljö
+            \item Undersöker hur threat modeling kan bidra med systemkontext för förbättrad sårbarhetsprioritering i en industriell DevSecOps-miljö
+            \item Arbetar med AI-driven analys för automatiserat beslutsfattande i CI/CD-processer
+        \end{highlights}
+        \textbf{Teknologier:} CI/CD, DevSecOps, container-scanning, sårbarhetsanalys, pipeline-automation, threat modeling
+    \end{onecolentry}
+
+    \vspace{0.3cm}
+
+    \begin{onecolentry}
+        \textbf{Trafikverket -- Studentutvecklare, DevOps} \hfill \textit{Jan 2025 -- Jun 2025} \\
+        Akademiskt samarbete (sekretessbelagt)
+        \begin{highlights}
+            \item Kontraktsform: Akademiskt samarbete (sekretessbelagt)
+            \item DevOps Engineer med ansvar från kravanalys och kundkontakt till implementation och deployment
+            \item Implementerade automatiserad ``Vulnerability Checker'' i teamets CI/CD-pipeline för stärkt säkerhet i leveranskedjan
+            \item Genomförde sårbarhetsanalyser med fokus på CVE, CVSS och SBOM-hantering
+            \item Huvudpresentatör vid slutpresentation mot kund -- demonstrerade teknisk lösning och affärsnytta
+        \end{highlights}
+    \end{onecolentry}
+
+    % ===== PROJEKT =====
+    \section{Projekt (Urval)}
+
+    \begin{onecolentry}
+        \textbf{Microservices Uthyrningssystem för Elsparkcyklar} \hfill \textit{BTH, 2025}
+        \begin{highlights}
+            \item Fullstack-utveckling av realtidssystem baserat på microservices-arkitektur
+            \item Docker för containerhantering, CI-testning via Scrutinizer
+            \item Bidrog i planeringen av hela teknikstacken
+        \end{highlights}
+    \end{onecolentry}
+
+    \vspace{0.2cm}
+
+    \begin{onecolentry}
+        \textbf{MoveOut -- Flyttsystem} \hfill \textit{BTH, 2024}
+        \begin{highlights}
+            \item Monolitisk webbapplikation utvecklad enligt Scrum-metodik med MySQL och ren SQL
+            \item Individuellt ansvarig för planering och fullstack-implementering
+        \end{highlights}
+    \end{onecolentry}
+
+    \vspace{0.2cm}
+
+    \begin{onecolentry}
+        \textbf{DevOps-projekt -- CI/CD och molndriftsättning} \hfill \textit{BTH, 2025--2026}
+        \begin{highlights}
+            \item Designade och implementerade CI/CD-pipeline för bygg, test och driftsättning av applikation
+            \item Arbetade med containerisering (Docker) och molnbaserad miljö (Azure)
+            \item Automatiserade konfiguration och deployment med Infrastructure as Code-principer
+            \item Använde versionshantering och DevOps-arbetsflöden för kontinuerlig leverans
+            \item Erfarenhet av testautomation, staging-miljöer och övervakning
+        \end{highlights}
+        \textbf{Tekniker:} Docker, Kubernetes, CI/CD, Azure, Ansible, Git, Linux
+    \end{onecolentry}
+
+    \vspace{0.2cm}
+
+    \begin{onecolentry}
+        \textbf{Övriga webbprojekt:} Symfony 7 MVC-app med Doctrine ORM \textbullet{} SPA med Web Components \& GraphQL \textbullet{} Chatbot i Python
+    \end{onecolentry}
+
+    % ===== SPRÅK =====
+    \section{Språk}
+    \begin{onecolentry}
+        Svenska -- Flytande \quad | \quad Engelska -- Flytande \quad | \quad Arabiska -- Modersmål
+    \end{onecolentry}
+
+\end{document}
