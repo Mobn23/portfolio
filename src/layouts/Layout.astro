@@ -1,0 +1,124 @@
+---
+import '../styles/global.css';
+import type { Lang } from '../i18n/translations';
+interface Props { lang: Lang; title: string; }
+const { lang, title } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mohamed Bnshi — DevSecOps Engineer & Software Developer. Portfolio showcasing secure software development, AI-driven systems, and CI/CD expertise." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <canvas id="particles"></canvas>
+  <div class="relative z-10">
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-400 z-[60] transition-none" style="width:0%"></div>
+    <slot />
+  </div>
+  <script>
+    // Scroll progress
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      (document.getElementById('scroll-progress') as HTMLElement).style.width = `${(window.scrollY / h) * 100}%`;
+    });
+
+    // Intersection observer for reveal animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Particle system
+    const canvas = document.getElementById('particles') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d')!;
+    let particles: {x:number;y:number;vx:number;vy:number;r:number;o:number}[] = [];
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    for (let i = 0; i < 60; i++) {
+      particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, r: Math.random()*2+0.5, o: Math.random()*0.5+0.1 });
+    }
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(139,92,246,${p.o})`; ctx.fill();
+      });
+      // Draw connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i+1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 150) {
+            ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(139,92,246,${0.08*(1-dist/150)})`; ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // Konami Code Easter Egg: ↑↑↓↓←→←→BA
+    const konamiCode = [38,38,40,40,37,39,37,39,66,65];
+    let konamiIndex = 0;
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+          konamiIndex = 0;
+          startMatrixRain();
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    });
+
+    function startMatrixRain() {
+      const mc = document.createElement('canvas');
+      mc.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;pointer-events:none;';
+      document.body.appendChild(mc);
+      const mctx = mc.getContext('2d')!;
+      mc.width = window.innerWidth;
+      mc.height = window.innerHeight;
+      const cols = Math.floor(mc.width / 16);
+      const drops: number[] = Array(cols).fill(1);
+      const chars = 'MOHAMEDBNSHI01DevSecOpsAIDockerK8s🛡️🚀';
+      let frames = 0;
+      function rain() {
+        mctx.fillStyle = 'rgba(15,13,26,0.05)';
+        mctx.fillRect(0, 0, mc.width, mc.height);
+        mctx.fillStyle = '#0f0';
+        mctx.font = '14px monospace';
+        for (let i = 0; i < drops.length; i++) {
+          const ch = chars[Math.floor(Math.random() * chars.length)];
+          mctx.fillText(ch, i * 16, drops[i] * 16);
+          if (drops[i] * 16 > mc.height && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+        }
+        frames++;
+        if (frames < 300) requestAnimationFrame(rain);
+        else { mc.style.transition = 'opacity 1s'; mc.style.opacity = '0'; setTimeout(() => mc.remove(), 1000); }
+      }
+      rain();
+    }
+  </script>
+</body>
+</html>

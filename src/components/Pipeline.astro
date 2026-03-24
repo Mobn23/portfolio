@@ -1,0 +1,86 @@
+---
+import type { Lang } from '../i18n/translations';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const title = lang === 'sv' ? 'Min DevSecOps Pipeline' : 'My DevSecOps Pipeline';
+
+const stages = [
+  { icon: '💻', name: 'Code', color: 'from-blue-500 to-blue-600', skills: ['Python', 'JavaScript', 'PHP', 'TypeScript', 'React', 'Node.js', 'Bash'] },
+  { icon: '🔨', name: 'Build', color: 'from-yellow-500 to-orange-500', skills: ['Docker', 'Kubernetes', 'Symfony', 'Flask', 'Express.js', 'Next.js', 'npm'] },
+  { icon: '🧪', name: 'Test', color: 'from-green-500 to-emerald-500', skills: ['Unit Testing', 'Integration Testing', 'E2E Testing', 'Test Automation', 'Staging'] },
+  { icon: '🛡️', name: 'Secure', color: 'from-red-500 to-pink-500', skills: ['OWASP', 'CVE/CVSS', 'SBOM', 'Threat Modeling', 'Container Scanning'] },
+  { icon: '🚀', name: 'Deploy', color: 'from-accent-500 to-primary-500', skills: ['Azure', 'GitHub Actions', 'Jenkins', 'CI/CD', 'Ansible', 'IaC'] },
+  { icon: '📊', name: 'Monitor', color: 'from-cyan-500 to-blue-400', skills: ['Logging', 'Observability', 'Feedback Loops', 'AI Analysis'] },
+];
+---
+<section class="section-container">
+  <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal">
+    <span class="gradient-text">{title}</span>
+  </h2>
+  <p class="text-gray-500 text-center mb-2 text-sm reveal">{lang === 'sv' ? 'Klicka på ett steg för att se tekniker' : 'Click a stage to see technologies'}</p>
+  <p class="text-accent-400/70 text-center mb-12 text-xs font-mono reveal">{lang === 'sv' ? '🎓 Tillämpar detta i mitt examensarbete med Ericsson — kontextmedveten sårbarhetsanalys i CI/CD' : '🎓 Currently applying this in my thesis with Ericsson — context-aware vulnerability analysis in CI/CD'}</p>
+
+  <!-- Pipeline -->
+  <div class="relative reveal">
+    <!-- Connection line -->
+    <div class="hidden md:block absolute top-12 left-[8%] right-[8%] h-1 bg-gradient-to-r from-blue-500 via-red-500 to-accent-500 rounded-full opacity-30"></div>
+    <!-- Animated pulse on the line -->
+    <div class="hidden md:block absolute top-[44px] left-[8%] w-4 h-4 rounded-full bg-white/80 shadow-lg shadow-white/50 pipeline-pulse"></div>
+
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+      {stages.map((s, idx) => (
+        <div class="pipeline-stage group cursor-pointer reveal" data-index={idx} style={`animation-delay:${idx * 0.1}s`}>
+          <div class={`relative mx-auto w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center text-3xl md:text-4xl shadow-lg group-hover:scale-110 group-hover:shadow-2xl transition-all duration-300 pipeline-icon`}>
+            {s.icon}
+            {idx < stages.length - 1 && (
+              <span class="hidden md:block absolute -right-4 top-1/2 -translate-y-1/2 text-gray-600 text-lg">→</span>
+            )}
+          </div>
+          <p class="text-center text-sm font-semibold text-white mt-3">{s.name}</p>
+          <!-- Skills dropdown -->
+          <div class="pipeline-skills hidden mt-3 glass p-3 text-center">
+            <div class="flex flex-wrap gap-1 justify-center">
+              {s.skills.map(sk => (
+                <span class="tag text-[10px]">{sk}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pipeline-pulse {
+    animation: pipelinePulse 3s ease-in-out infinite;
+  }
+  @keyframes pipelinePulse {
+    0% { left: 8%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { left: 88%; opacity: 0; }
+  }
+  .pipeline-stage.active .pipeline-icon {
+    transform: scale(1.15);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+  }
+  .pipeline-stage.active .pipeline-skills {
+    display: block;
+    animation: fadeUp 0.3s ease-out;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.pipeline-stage').forEach(stage => {
+    stage.addEventListener('click', () => {
+      const wasActive = stage.classList.contains('active');
+      document.querySelectorAll('.pipeline-stage').forEach(s => s.classList.remove('active'));
+      if (!wasActive) stage.classList.add('active');
+    });
+  });
+</script>

@@ -1,0 +1,131 @@
+---
+import type { Lang } from '../i18n/translations';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const hint = lang === 'sv' ? "Skriv 'help' för kommandon" : "Type 'help' for commands";
+---
+<section class="section-container">
+  <div class="glass glow-border max-w-3xl mx-auto overflow-hidden reveal">
+    <!-- Title bar -->
+    <div class="flex items-center gap-2 px-4 py-2 bg-white/5 border-b border-white/10">
+      <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+      <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+      <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+      <span class="text-xs text-gray-500 ml-2 font-mono">mohamed@portfolio:~$</span>
+    </div>
+    <!-- Terminal body -->
+    <div id="terminal" class="p-4 font-mono text-sm h-80 overflow-y-auto">
+      <div id="terminal-output">
+        <p class="text-green-400">Welcome to Mohamed's portfolio terminal! 🚀</p>
+        <p class="text-gray-500">{hint}</p>
+        <br/>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-accent-400 shrink-0">❯</span>
+        <input id="terminal-input" type="text" class="bg-transparent outline-none text-gray-200 w-full caret-accent-400" autocomplete="off" spellcheck="false" autofocus aria-label="Terminal input" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ lang }}>
+  const commands = {
+    help: () => `<span class="text-yellow-400">Available commands:</span>
+  <span class="text-accent-400">whoami</span>      - About me
+  <span class="text-accent-400">skills</span>      - Technical skills
+  <span class="text-accent-400">experience</span>  - Work experience
+  <span class="text-accent-400">education</span>   - Education
+  <span class="text-accent-400">contact</span>     - Contact info
+  <span class="text-accent-400">hobbies</span>     - What I do for fun
+  <span class="text-accent-400">languages</span>   - Languages I speak
+  <span class="text-accent-400">clear</span>       - Clear terminal
+  <span class="text-accent-400">sudo hire me</span> - 😏`,
+
+    whoami: () => `<span class="text-green-400">Mohamed Bnshi</span>
+  DevSecOps Engineer & Software Developer
+  📍 Karlskrona, Sweden
+  🎓 BSc Software Engineering @ BTH (graduating Aug 2026)
+  🟢 Available from July 2026
+  Currently interning at <span class="text-blue-400">Ericsson</span> — building AI-driven systems`,
+
+    skills: () => `<span class="text-yellow-400">Security:</span> OWASP · CVE/CVSS · SBOM · Threat Modeling · Container Scanning
+<span class="text-yellow-400">DevOps:</span>   Docker · Kubernetes · Azure · GitHub Actions · Jenkins · CI/CD
+<span class="text-yellow-400">Code:</span>     Python · JavaScript · PHP · SQL · TypeScript · Bash
+<span class="text-yellow-400">DB:</span>       MySQL · PostgreSQL · MongoDB · SQLite
+<span class="text-yellow-400">AI:</span>       LLM Integration · MCP Servers · AI Agents
+<span class="text-yellow-400">Web:</span>      React · Node.js · Symfony · Flask · GraphQL`,
+
+    experience: () => `<span class="text-blue-400">▸ Ericsson × BTH</span> — Software Engineer Intern (AI-driven Systems) <span class="text-green-400">[ongoing]</span>
+  MCP servers · LLM agents · Docker/K8s · CI/CD automation
+
+<span class="text-blue-400">▸ BTH × Ericsson</span> — Thesis: Vulnerability Analysis in CI/CD <span class="text-green-400">[ongoing]</span>
+  DevSecOps · Threat modeling · Pipeline automation
+
+<span class="text-blue-400">▸ Trafikverket</span> — Student Developer, DevOps <span class="text-gray-500">[Jan–Jun 2025]</span>
+  Vulnerability Checker · CVE/CVSS · SBOM · Lead presenter`,
+
+    education: () => `<span class="text-blue-400">Blekinge Tekniska Högskola (BTH)</span>
+  BSc Software Engineering (Web Programming, 180 ECTS)
+  Semester 6 — Graduating August 2026`,
+
+    contact: () => `<span class="text-yellow-400">Email:</span>    mohamedbnshi@gmail.com
+<span class="text-yellow-400">LinkedIn:</span> <a href="https://www.linkedin.com/in/mohamedbnshi/" class="text-accent-400 hover:underline" target="_blank">linkedin.com/in/mohamedbnshi</a>
+<span class="text-yellow-400">GitHub:</span>   <a href="https://github.com/mobn23" class="text-accent-400 hover:underline" target="_blank">github.com/mobn23</a>
+<span class="text-yellow-400">Phone:</span>    079-018 44 41`,
+
+    hobbies: () => `♟️  Chess — strategic thinking on and off the board
+🏊 Swimming — clears the mind
+🌞 Tanning — Swedish summers are short, gotta make it count
+💻 Programming — yes, it's also a hobby
+🥾 Hiking & ⛺ Camping — Swedish nature is unbeatable
+✈️  Traveling — exploring new cultures
+🎵 Techno — fuels the late-night coding sessions`,
+
+    languages: () => `🇸🇪 Svenska — Flytande
+🇬🇧 English — Fluent
+🇸🇦 Arabic — Native`,
+
+    'sudo hire me': () => `<span class="text-green-400">[sudo] password for recruiter: ********
+✅ Access granted!</span>
+
+<span class="text-yellow-400">Initiating hiring sequence...</span>
+📧 Sending email to mohamedbnshi@gmail.com...
+📅 Scheduling interview...
+🎉 <span class="text-green-400 font-bold">Congratulations! You've made an excellent choice.</span>
+
+<span class="text-gray-500">(Just kidding... unless? 😏)</span>`,
+
+    clear: () => '__CLEAR__',
+  };
+
+  const input = document.getElementById('terminal-input');
+  const output = document.getElementById('terminal-output');
+  const terminal = document.getElementById('terminal');
+
+  // Focus input when clicking anywhere in terminal
+  terminal.addEventListener('click', () => input.focus());
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const cmd = input.value.trim().toLowerCase();
+    input.value = '';
+    if (!cmd) return;
+
+    // Echo command
+    output.innerHTML += `<p><span class="text-accent-400">❯</span> <span class="text-white">${cmd}</span></p>`;
+
+    const handler = commands[cmd];
+    if (handler) {
+      const result = handler();
+      if (result === '__CLEAR__') {
+        output.innerHTML = '';
+      } else {
+        output.innerHTML += `<pre class="text-gray-300 whitespace-pre-wrap mb-2">${result}</pre>`;
+      }
+    } else {
+      output.innerHTML += `<p class="text-red-400">Command not found: ${cmd}. Type 'help' for available commands.</p>`;
+    }
+    output.innerHTML += '<br/>';
+    terminal.scrollTop = terminal.scrollHeight;
+  });
+</script>

@@ -1,0 +1,45 @@
+---
+import type { Lang } from '../i18n/translations';
+import { t } from '../i18n/translations';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const other: Lang = lang === 'en' ? 'sv' : 'en';
+const otherHref = lang === 'en' ? '/sv' : '/';
+const sections = ['about', 'skills', 'experience', 'projects', 'contact'] as const;
+---
+<nav class="fixed top-0 w-full z-50 glass !rounded-none border-x-0 border-t-0" id="navbar">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+    <a href={lang === 'en' ? '/' : '/sv'} class="font-bold text-lg gradient-text font-mono">MB</a>
+    <div class="hidden md:flex items-center gap-6 text-sm">
+      {sections.map(s => (
+        <a href={`#${s}`} class="text-gray-400 hover:text-white transition-colors">{t[lang][`nav_${s}`]}</a>
+      ))}
+      <a href={otherHref} class="tag hover:bg-accent-500/20 transition-colors cursor-pointer">
+        {other === 'sv' ? '🇸🇪 SV' : '🇬🇧 EN'}
+      </a>
+    </div>
+    <button id="mobile-toggle" class="md:hidden text-gray-400 hover:text-white" aria-label="Menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-2">
+    {sections.map(s => (
+      <a href={`#${s}`} class="block text-gray-400 hover:text-white transition-colors py-1">{t[lang][`nav_${s}`]}</a>
+    ))}
+    <a href={otherHref} class="tag inline-block mt-2">{other === 'sv' ? '🇸🇪 SV' : '🇬🇧 EN'}</a>
+  </div>
+</nav>
+
+<script>
+  const toggle = document.getElementById('mobile-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  toggle.addEventListener('click', () => menu.classList.toggle('hidden'));
+  document.querySelectorAll('#mobile-menu a').forEach(a => a.addEventListener('click', () => menu.classList.add('hidden')));
+
+  // Shrink nav on scroll
+  const nav = document.getElementById('navbar')!;
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('!py-1', window.scrollY > 50);
+    nav.classList.toggle('!bg-dark-900/80', window.scrollY > 50);
+  });
+</script>

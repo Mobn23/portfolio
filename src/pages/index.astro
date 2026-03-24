@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import About from '../components/About.astro';
+import Currently from '../components/Currently.astro';
+import Orbit from '../components/Orbit.astro';
+import Skills from '../components/Skills.astro';
+import Terminal from '../components/Terminal.astro';
+import Pipeline from '../components/Pipeline.astro';
+import Experience from '../components/Experience.astro';
+import Projects from '../components/Projects.astro';
+import Contact from '../components/Contact.astro';
+const lang = 'en' as const;
+---
+<Layout lang={lang} title="Mohamed Bnshi — DevSecOps Engineer">
+  <Navbar lang={lang} />
+  <Hero lang={lang} />
+  <Stats lang={lang} />
+  <About lang={lang} />
+  <Currently lang={lang} />
+  <Orbit lang={lang} />
+  <Skills lang={lang} />
+  <Terminal lang={lang} />
+  <Pipeline lang={lang} />
+  <Experience lang={lang} />
+  <Projects lang={lang} />
+  <Contact lang={lang} />
+</Layout>
