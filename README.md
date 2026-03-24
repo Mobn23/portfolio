@@ -1,8 +1,8 @@
 # Mohamed Bnshi — Portfolio
 
-Personal portfolio built with **Astro**, **Tailwind CSS** & **TypeScript**. Bilingual (EN/SV). Auto-deployed via **GitHub Actions** to GitHub Pages.
+Personal portfolio built with **Astro**, **Tailwind CSS** & **TypeScript**. Bilingual (EN/SV). Deployed on **Vercel**.
 
-🔗 **Live:** [mobn23.github.io/portfolio](https://mobn23.github.io/portfolio)
+🔗 **Live:** [portfolio-delta-virid-21.vercel.app](https://portfolio-delta-virid-21.vercel.app/)
 
 ## Tech Stack
 
@@ -10,7 +10,7 @@ Personal portfolio built with **Astro**, **Tailwind CSS** & **TypeScript**. Bili
 - **Styling:** Tailwind CSS
 - **Language:** TypeScript
 - **i18n:** Custom bilingual support (English / Swedish)
-- **CI/CD:** GitHub Actions → GitHub Pages
+- **Deployment:** Vercel
 
 ## Development
 
@@ -23,7 +23,7 @@ npm run preview  # Preview production build
 
 ## Deployment
 
-Every push to `main` triggers automatic build and deployment via GitHub Actions.
+Automatic deployment via Vercel on every push to `main`.
 
 ## License
 
