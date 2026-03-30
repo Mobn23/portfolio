@@ -1,4 +1,4 @@
-# Mohamed Bnshi — Portfolio
+# Mohamed Bnshi - Portfolio
 
 Personal portfolio built with **Astro**, **Tailwind CSS** & **TypeScript**. Bilingual (EN/SV). Deployed on **Vercel**.
 
