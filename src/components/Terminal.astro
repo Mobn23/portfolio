@@ -111,8 +111,11 @@ const hint = lang === 'sv' ? "Skriv 'help' för kommandon" : "Type 'help' for co
     input.value = '';
     if (!cmd) return;
 
-    // Echo command
-    output.innerHTML += `<p><span class="text-accent-400">❯</span> <span class="text-white">${cmd}</span></p>`;
+    // Echo command (sanitized)
+    const echo = document.createElement('p');
+    echo.innerHTML = `<span class="text-accent-400">❯</span> <span class="text-white"></span>`;
+    echo.querySelector('span:last-child').textContent = cmd;
+    output.appendChild(echo);
 
     const handler = commands[cmd];
     if (handler) {
@@ -123,7 +126,10 @@ const hint = lang === 'sv' ? "Skriv 'help' för kommandon" : "Type 'help' for co
         output.innerHTML += `<pre class="text-gray-300 whitespace-pre-wrap mb-2">${result}</pre>`;
       }
     } else {
-      output.innerHTML += `<p class="text-red-400">Command not found: ${cmd}. Type 'help' for available commands.</p>`;
+      const errP = document.createElement('p');
+      errP.className = 'text-red-400';
+      errP.textContent = `Command not found: ${cmd}. Type 'help' for available commands.`;
+      output.appendChild(errP);
     }
     output.innerHTML += '<br/>';
     terminal.scrollTop = terminal.scrollHeight;
