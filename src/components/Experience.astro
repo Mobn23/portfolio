@@ -5,6 +5,12 @@ interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const i = t[lang];
 
+const collabs = [
+  { icon: '🤖', company: 'Ericsson', role: i.collab_ericsson_ai, sub: i.collab_ericsson_ai_role, date: i.collab_ericsson_ai_date },
+  { icon: '🛡️', company: 'Ericsson', role: i.collab_thesis, sub: i.collab_thesis_role, date: i.collab_thesis_date },
+  { icon: '🚦', company: 'Trafikverket', role: i.collab_trafikverket, sub: i.collab_trafikverket_role, date: i.collab_trafikverket_date },
+];
+
 const experiences = [
   { title: i.exp_ericsson_title, company: i.exp_ericsson_company, date: i.exp_ericsson_date, details: [i.exp_ericsson_d1, i.exp_ericsson_d2, i.exp_ericsson_d3, ...(i.exp_ericsson_d4 ? [i.exp_ericsson_d4] : [])], tags: ['MCP', 'LLM', 'Docker', 'Kubernetes', 'CI/CD', 'Gerrit', 'Jenkins'], active: true },
   { title: i.exp_thesis_title, company: i.exp_thesis_company, date: i.exp_thesis_date, details: [i.exp_thesis_d1, i.exp_thesis_d2, i.exp_thesis_d3, ...(i.exp_thesis_d4 ? [i.exp_thesis_d4] : [])], tags: ['DevSecOps', 'CI/CD', 'Threat Modeling', 'Vulnerability Analysis'], active: true },
@@ -15,6 +21,24 @@ const experiences = [
   <h2 class="text-3xl md:text-4xl font-bold mb-12 reveal">
     <span class="gradient-text">{i.exp_title}</span>
   </h2>
+
+  <!-- Collaboration cards -->
+  <p class="text-center text-gray-400 text-sm mb-4 reveal">{i.collab_heading}</p>
+  <div class="relative mb-12 reveal">
+    <!-- Connecting line (desktop only) -->
+    <div class="hidden md:block absolute top-1/2 left-[16%] right-[16%] h-px bg-gradient-to-r from-accent-500 via-primary-500 to-accent-500 opacity-30"></div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {collabs.map((c, idx) => (
+        <div class="glass p-4 text-center glow-border reveal" style={`animation-delay:${idx*0.1}s`}>
+          <span class="text-2xl">{c.icon}</span>
+          <p class="font-bold text-white text-sm mt-1">{c.company}</p>
+          <p class="text-accent-400 text-xs font-mono">{c.role}</p>
+          <p class="text-gray-500 text-xs">{c.sub} · {c.date}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
   <div class="relative">
     <!-- Timeline line -->
     <div class="absolute left-4 md:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-accent-500 via-primary-500 to-transparent"></div>

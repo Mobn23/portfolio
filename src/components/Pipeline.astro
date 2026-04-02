@@ -4,6 +4,15 @@ interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const title = lang === 'sv' ? 'Min DevSecOps Pipeline' : 'My DevSecOps Pipeline';
 
+const examples: Record<string, { en: string; sv: string }> = {
+  Code: { en: 'At Ericsson, I build MCP servers in Python that feed context to LLM agents', sv: 'På Ericsson bygger jag MCP-servrar i Python som ger kontext till LLM-agenter' },
+  Build: { en: 'Docker multi-stage builds for agent services, orchestrated with Kubernetes', sv: 'Docker multi-stage builds för agenttjänster, orkestrerade med Kubernetes' },
+  Test: { en: 'Automated feedback loops that catch CI failures before code review', sv: 'Automatiserade feedback-loopar som fångar CI-fel före kodgranskning' },
+  Secure: { en: 'My thesis: aggregating scanner results with threat model context to prioritize real vulnerabilities', sv: 'Mitt examensarbete: aggregerar skannerresultat med hotmodellskontext för att prioritera riktiga sårbarheter' },
+  Deploy: { en: 'Jenkins + Gerrit at Ericsson, GitHub Actions for personal projects', sv: 'Jenkins + Gerrit på Ericsson, GitHub Actions för egna projekt' },
+  Monitor: { en: 'AI-driven analysis of pipeline health — the system I am building now', sv: 'AI-driven analys av pipeline-hälsa — systemet jag bygger just nu' },
+};
+
 const stages = [
   { icon: '💻', name: 'Code', color: 'from-blue-500 to-blue-600', skills: ['Python', 'JavaScript', 'PHP', 'TypeScript', 'React', 'Node.js', 'Bash'] },
   { icon: '🔨', name: 'Build', color: 'from-yellow-500 to-orange-500', skills: ['Docker', 'Kubernetes', 'Symfony', 'Flask', 'Express.js', 'Next.js', 'npm'] },
@@ -44,6 +53,7 @@ const stages = [
                 <span class="tag text-[10px]">{sk}</span>
               ))}
             </div>
+            <p class="text-gray-400 text-xs mt-2 italic">{examples[s.name][lang]}</p>
           </div>
         </div>
       ))}
