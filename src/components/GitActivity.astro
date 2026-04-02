@@ -1,0 +1,22 @@
+---
+import type { Lang } from '../i18n/translations';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const fallback = lang === 'sv' ? '🟢 Bygger aktivt' : '🟢 Actively building';
+---
+<div class="text-center py-4 reveal">
+  <span id="git-activity" class="text-xs text-gray-500">{fallback}</span>
+</div>
+
+<script define:vars={{ fallback }}>
+  fetch('https://api.github.com/users/Mobn23/events/public?per_page=1')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(events => {
+      if (!events.length) return;
+      const ago = Date.now() - new Date(events[0].created_at).getTime();
+      const hours = Math.floor(ago / 3600000);
+      const label = hours < 24 ? `${hours}h ago` : `${Math.floor(hours / 24)}d ago`;
+      document.getElementById('git-activity').textContent = `🟢 Last push: ${label}`;
+    })
+    .catch(() => {});
+</script>
