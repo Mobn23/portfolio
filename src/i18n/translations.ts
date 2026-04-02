@@ -80,8 +80,8 @@ export const t: Record<Lang, Record<string, string>> = {
     collab_trafikverket_date: 'Jan – Jun 2025',
     threat_title: '🛡️ Security Posture of This Site',
     threat_asset: 'Static site (Astro SSG) on GitHub Pages',
-    threat_threats: 'XSS via terminal input, dependency vulnerabilities, CDN compromise',
-    threat_mitigations: 'Input sanitization, Dependabot alerts, no secrets in client code, CSP headers',
+    threat_threats: 'XSS via terminal input, dependency vulnerabilities',
+    threat_mitigations: 'Input sanitization, Dependabot alerts, self-hosted fonts (no CDN dependency), CSP headers, no secrets in client code',
   },
   sv: {
     nav_about: 'Om mig',
@@ -163,7 +163,7 @@ export const t: Record<Lang, Record<string, string>> = {
     collab_trafikverket_date: 'Jan – Jun 2025',
     threat_title: '🛡️ Säkerhetsanalys av denna sida',
     threat_asset: 'Statisk sida (Astro SSG) på GitHub Pages',
-    threat_threats: 'XSS via terminalinput, beroendesårbarheter, CDN-kompromiss',
-    threat_mitigations: 'Input-sanering, Dependabot-varningar, inga hemligheter i klientkod, CSP-headers',
+    threat_threats: 'XSS via terminalinput, beroendesårbarheter',
+    threat_mitigations: 'Input-sanering, Dependabot-varningar, självhostade typsnitt (inget CDN-beroende), CSP-headers, inga hemligheter i klientkod',
   },
 };
