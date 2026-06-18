@@ -5,19 +5,19 @@ const { lang } = Astro.props;
 const title = lang === 'sv' ? 'Min DevSecOps Pipeline' : 'My DevSecOps Pipeline';
 
 const examples: Record<string, { en: string; sv: string }> = {
-  Code: { en: 'At Ericsson, I build MCP servers in Python that feed context to LLM agents', sv: 'På Ericsson bygger jag MCP-servrar i Python som ger kontext till LLM-agenter' },
-  Build: { en: 'Docker multi-stage builds for agent services, orchestrated with Kubernetes', sv: 'Docker multi-stage builds för agenttjänster, orkestrerade med Kubernetes' },
-  Test: { en: 'Automated feedback loops that catch CI failures before code review', sv: 'Automatiserade feedback-loopar som fångar CI-fel före kodgranskning' },
-  Secure: { en: 'My thesis: aggregating scanner results with threat model context to prioritize real vulnerabilities', sv: 'Mitt examensarbete: aggregerar skannerresultat med hotmodellskontext för att prioritera riktiga sårbarheter' },
+  Code: { en: 'Built MCP servers in Python that feed context to LLM agents at Ericsson', sv: 'Byggde MCP-servrar i Python som ger kontext till LLM-agenter på Ericsson' },
+  Build: { en: 'Docker containers for agent services, orchestrated with Kubernetes', sv: 'Docker-containrar för agenttjänster, orkestrerade med Kubernetes' },
+  Test: { en: 'Automated test scenarios simulating CI failures for AI-driven healing validation', sv: 'Automatiserade testscenarier som simulerar CI-fel för AI-driven healing-validering' },
+  Secure: { en: 'Thesis: aggregating multi-scanner results with IaC context to triage real vulnerabilities', sv: 'Examensarbete: aggregerar multi-scanner-resultat med IaC-kontext för att triagera sårbarheter' },
   Deploy: { en: 'Jenkins + Gerrit at Ericsson, GitHub Actions for personal projects', sv: 'Jenkins + Gerrit på Ericsson, GitHub Actions för egna projekt' },
-  Monitor: { en: 'AI-driven analysis of pipeline health — the system I am building now', sv: 'AI-driven analys av pipeline-hälsa — systemet jag bygger just nu' },
+  Monitor: { en: 'AI-driven analysis of pipeline health and auto-healing at Ericsson', sv: 'AI-driven analys av pipeline-hälsa och auto-healing på Ericsson' },
 };
 
 const stages = [
   { icon: '💻', name: 'Code', color: 'from-blue-500 to-blue-600', skills: ['Python', 'JavaScript', 'PHP', 'TypeScript', 'React', 'Node.js', 'Bash'] },
-  { icon: '🔨', name: 'Build', color: 'from-yellow-500 to-orange-500', skills: ['Docker', 'Kubernetes', 'Symfony', 'Flask', 'Express.js', 'Next.js', 'npm'] },
+  { icon: '🔨', name: 'Build', color: 'from-yellow-500 to-orange-500', skills: ['Docker', 'Kubernetes', 'Podman', 'Flask', 'Express.js', 'React', 'npm'] },
   { icon: '🧪', name: 'Test', color: 'from-green-500 to-emerald-500', skills: ['Unit Testing', 'Integration Testing', 'E2E Testing', 'Test Automation', 'Staging'] },
-  { icon: '🛡️', name: 'Secure', color: 'from-red-500 to-pink-500', skills: ['OWASP', 'CVE/CVSS', 'SBOM', 'Threat Modeling', 'Container Scanning'] },
+  { icon: '🛡️', name: 'Secure', color: 'from-red-500 to-pink-500', skills: ['Trivy', 'Grype', 'Semgrep', 'OWASP ZAP', 'Gitleaks', 'Threat Modeling', 'EPSS/KEV'] },
   { icon: '🚀', name: 'Deploy', color: 'from-accent-500 to-primary-500', skills: ['Azure', 'GitHub Actions', 'Jenkins', 'CI/CD', 'Ansible', 'IaC'] },
   { icon: '📊', name: 'Monitor', color: 'from-cyan-500 to-blue-400', skills: ['Logging', 'Observability', 'Feedback Loops', 'AI Analysis'] },
 ];
@@ -27,7 +27,7 @@ const stages = [
     <span class="gradient-text">{title}</span>
   </h2>
   <p class="text-gray-500 text-center mb-2 text-sm reveal">{lang === 'sv' ? 'Klicka på ett steg för att se tekniker' : 'Click a stage to see technologies'}</p>
-  <p class="text-accent-400/70 text-center mb-12 text-xs font-mono reveal">{lang === 'sv' ? '🎓 Tillämpar detta i mitt examensarbete med Ericsson — kontextmedveten sårbarhetsanalys i CI/CD' : '🎓 Currently applying this in my thesis with Ericsson — context-aware vulnerability analysis in CI/CD'}</p>
+  <p class="text-accent-400/70 text-center mb-12 text-xs font-mono reveal">{lang === 'sv' ? '🎓 Tillämpade detta i mitt examensarbete med Ericsson — kontextmedveten sårbarhetsanalys i CI/CD' : '🎓 Applied this in my thesis with Ericsson — context-aware vulnerability analysis in CI/CD'}</p>
 
   <!-- Pipeline -->
   <div class="relative reveal">

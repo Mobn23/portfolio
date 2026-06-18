@@ -41,40 +41,197 @@ const { lang, title } = Astro.props;
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Particle system
+    // Graph node system (global background)
     const canvas = document.getElementById('particles') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d')!;
-    let particles: {x:number;y:number;vx:number;vy:number;r:number;o:number}[] = [];
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    resize();
-    window.addEventListener('resize', resize);
-    for (let i = 0; i < 60; i++) {
-      particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, r: Math.random()*2+0.5, o: Math.random()*0.5+0.1 });
-    }
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        ctx.fillStyle = `rgba(139,92,246,${p.o})`; ctx.fill();
-      });
-      // Draw connections
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i+1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < 150) {
-            ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(139,92,246,${0.08*(1-dist/150)})`; ctx.stroke();
-          }
+    let W = canvas.width = window.innerWidth;
+    let H = canvas.height = window.innerHeight;
+    let mouse = { x: -999, y: -999 };
+
+    window.addEventListener('resize', () => {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    });
+    let hoveredNode: number = -1;
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      hoveredNode = -1;
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        if (Math.hypot(n.x - e.clientX, n.y - e.clientY) < n.radius + 15) {
+          hoveredNode = i;
+          break;
         }
       }
-      requestAnimationFrame(draw);
+    });
+
+    const labels = ['Python', 'TypeScript', 'DevSecOps', 'Docker', 'K8s', 'CI/CD', 'Security', 'IaC', 'Linux', 'Bash', 'REST API', 'Jenkins', 'Trivy', 'Flask', 'Node.js', 'Git', 'Helm', 'Ansible', 'Semgrep', 'PostgreSQL'];
+
+    // Accurate knowledge graph relationships
+    // Index: 0=Python, 1=TypeScript, 2=DevSecOps, 3=Docker, 4=K8s, 5=CI/CD,
+    //        6=Security, 7=IaC, 8=Linux, 9=Bash, 10=REST API, 11=Jenkins,
+    //        12=Trivy, 13=Flask, 14=Node.js, 15=Git, 16=Helm, 17=Ansible, 18=Semgrep, 19=PostgreSQL
+    const relationships: [number, number, string][] = [
+      [13, 0, 'built-with'],   // Flask → Python
+      [14, 1, 'built-with'],   // Node.js → TypeScript
+      [2, 5, 'includes'],      // DevSecOps → CI/CD
+      [2, 6, 'includes'],      // DevSecOps → Security
+      [4, 3, 'orchestrates'],  // K8s → Docker
+      [16, 4, 'deploys-to'],   // Helm → K8s
+      [17, 8, 'provisions'],   // Ansible → Linux
+      [3, 8, 'runs-on'],       // Docker → Linux
+      [5, 11, 'uses'],         // CI/CD → Jenkins
+      [5, 15, 'uses'],         // CI/CD → Git
+      [6, 12, 'uses'],         // Security → Trivy
+      [6, 18, 'uses'],         // Security → Semgrep
+      [7, 16, 'includes'],     // IaC → Helm
+      [7, 17, 'includes'],     // IaC → Ansible
+      [7, 3, 'includes'],      // IaC → Docker (Compose)
+      [11, 3, 'runs'],         // Jenkins → Docker
+      [19, 8, 'runs-on'],      // PostgreSQL → Linux
+      [0, 9, 'scripts-with'],  // Python → Bash
+      [10, 14, 'served-by'],   // REST API → Node.js
+      [10, 13, 'served-by'],   // REST API → Flask
+    ];
+
+    interface GNode { x: number; y: number; vx: number; vy: number; label: string; radius: number; category: string; }
+
+    const categories: Record<string, string> = {
+      'Python': 'lang', 'TypeScript': 'lang', 'Bash': 'lang',
+      'DevSecOps': 'practice', 'Security': 'practice', 'CI/CD': 'practice', 'IaC': 'practice',
+      'Docker': 'infra', 'K8s': 'infra', 'Linux': 'infra', 'Jenkins': 'infra',
+      'Trivy': 'tool', 'Semgrep': 'tool', 'Flask': 'tool', 'Node.js': 'tool', 'Git': 'tool', 'Helm': 'tool', 'Ansible': 'tool',
+      'REST API': 'concept', 'PostgreSQL': 'infra',
+    };
+
+    const catColors: Record<string, string> = {
+      'lang': '129, 140, 248',       // indigo
+      'practice': '52, 211, 153',    // emerald
+      'infra': '251, 146, 60',       // orange
+      'tool': '147, 51, 234',        // purple
+      'concept': '99, 102, 241',     // blue
+    };
+
+    const nodes: GNode[] = labels.map((label) => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      label,
+      radius: 7 + Math.random() * 5,
+      category: categories[label] || 'concept',
+    }));
+
+    // Use relationships as edges
+    const edges: [number, number][] = relationships.map(([s, t]) => [s, t]);
+
+    function graphLoop() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Update — keep nodes within viewport + repel each other
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+
+        // Bounce off edges with margin
+        if (n.x < 60) { n.x = 60; n.vx = Math.abs(n.vx); }
+        if (n.x > W - 60) { n.x = W - 60; n.vx = -Math.abs(n.vx); }
+        if (n.y < 40) { n.y = 40; n.vy = Math.abs(n.vy); }
+        if (n.y > H - 40) { n.y = H - 40; n.vy = -Math.abs(n.vy); }
+
+        // Repel other nodes (prevent overlap)
+        for (let j = i + 1; j < nodes.length; j++) {
+          const o = nodes[j];
+          const dx = n.x - o.x;
+          const dy = n.y - o.y;
+          const dist = Math.hypot(dx, dy);
+          const minDist = 90; // minimum distance between nodes
+          if (dist < minDist && dist > 0) {
+            const force = (minDist - dist) * 0.003;
+            const fx = (dx / dist) * force;
+            const fy = (dy / dist) * force;
+            n.vx += fx; n.vy += fy;
+            o.vx -= fx; o.vy -= fy;
+          }
+        }
+
+        // Very gentle center pull
+        n.vx += (W / 2 - n.x) * 0.000008;
+        n.vy += (H / 2 - n.y) * 0.000008;
+
+        // Strong damping (slow motion)
+        n.vx *= 0.98;
+        n.vy *= 0.98;
+
+        // Cap speed
+        const speed = Math.hypot(n.vx, n.vy);
+        if (speed > 0.5) {
+          n.vx = (n.vx / speed) * 0.5;
+          n.vy = (n.vy / speed) * 0.5;
+        }
+      }
+
+      // Find connected nodes for hover highlight
+      const connectedToHover = new Set<number>();
+      if (hoveredNode >= 0) {
+        connectedToHover.add(hoveredNode);
+        for (const [a, b] of edges) {
+          if (a === hoveredNode) connectedToHover.add(b);
+          if (b === hoveredNode) connectedToHover.add(a);
+        }
+      }
+
+      // Draw edges
+      for (const [a, b] of edges) {
+        const na = nodes[a], nb = nodes[b];
+        const dist = Math.hypot(na.x - nb.x, na.y - nb.y);
+        if (dist > 500) continue;
+
+        const isHighlighted = hoveredNode >= 0 && (a === hoveredNode || b === hoveredNode);
+        const alpha = isHighlighted ? 0.8 : (1 - dist / 500) * 0.3;
+        const width = isHighlighted ? 2.5 : 1.2;
+
+        ctx.beginPath();
+        ctx.moveTo(na.x, na.y);
+        ctx.lineTo(nb.x, nb.y);
+        ctx.strokeStyle = isHighlighted ? `rgba(255, 255, 255, ${alpha})` : `rgba(99, 102, 241, ${alpha})`;
+        ctx.lineWidth = width;
+        ctx.stroke();
+      }
+
+      // Draw nodes
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const color = catColors[n.category] || '99, 102, 241';
+        const isHighlighted = connectedToHover.has(i);
+        const dimmed = hoveredNode >= 0 && !isHighlighted;
+
+        // Outer glow
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.radius + (isHighlighted ? 12 : 6), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${color}, ${isHighlighted ? 0.15 : 0.04})`;
+        ctx.fill();
+        // Node
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${color}, ${dimmed ? 0.25 : 0.75})`;
+        ctx.fill();
+        // Border
+        ctx.strokeStyle = `rgba(${color}, ${isHighlighted ? 0.9 : dimmed ? 0.15 : 0.4})`;
+        ctx.lineWidth = isHighlighted ? 2.5 : 1.5;
+        ctx.stroke();
+        // Label
+        ctx.font = `${isHighlighted ? 'bold 13px' : '11px'} monospace`;
+        ctx.fillStyle = `rgba(220, 220, 240, ${dimmed ? 0.2 : isHighlighted ? 1 : 0.6})`;
+        ctx.fillText(n.label, n.x + n.radius + 10, n.y + 4);
+      }
+
+      requestAnimationFrame(graphLoop);
     }
-    draw();
+    graphLoop();
 
     // Konami Code Easter Egg: ↑↑↓↓←→←→BA
     const konamiCode = [38,38,40,40,37,39,37,39,66,65];
