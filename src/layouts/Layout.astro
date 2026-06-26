@@ -18,6 +18,7 @@ const { lang, title } = Astro.props;
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
   <canvas id="particles"></canvas>
+  <div id="graph-blur-overlay"></div>
   <div class="relative z-10">
     <!-- Scroll progress bar -->
     <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-400 z-[60] transition-none" style="width:0%"></div>
@@ -65,6 +66,8 @@ const { lang, title } = Astro.props;
           break;
         }
       }
+      const overlay = document.getElementById('graph-blur-overlay');
+      if (overlay) overlay.style.backdropFilter = hoveredNode >= 0 ? 'blur(0px)' : 'blur(3px)';
     });
 
     const labels = ['Python', 'TypeScript', 'DevSecOps', 'Docker', 'K8s', 'CI/CD', 'Security', 'IaC', 'Linux', 'Bash', 'REST API', 'Jenkins', 'Trivy', 'Flask', 'Node.js', 'Git', 'Helm', 'Ansible', 'Semgrep', 'PostgreSQL'];
