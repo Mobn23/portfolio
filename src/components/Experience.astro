@@ -13,7 +13,7 @@ const collabs = [
 
 const experiences = [
   { title: i.exp_ericsson_title, company: i.exp_ericsson_company, date: i.exp_ericsson_date, details: [i.exp_ericsson_d1, i.exp_ericsson_d2, i.exp_ericsson_d3, ...(i.exp_ericsson_d4 ? [i.exp_ericsson_d4] : [])], tags: ['MongoDB', 'Python', 'K-Graph', 'Event-Driven', 'Docker', 'Gerrit', 'Jenkins'], active: true },
-  { title: i.exp_thesis_title, company: i.exp_thesis_company, date: i.exp_thesis_date, details: [i.exp_thesis_d1, i.exp_thesis_d2, i.exp_thesis_d3, ...(i.exp_thesis_d4 ? [i.exp_thesis_d4] : [])], tags: ['DevSecOps', 'CI/CD', 'Threat Modeling', 'Vulnerability Analysis'], active: true },
+  { title: i.exp_thesis_title, company: i.exp_thesis_company, date: i.exp_thesis_date, details: [i.exp_thesis_d1, i.exp_thesis_d2, i.exp_thesis_d3, ...(i.exp_thesis_d4 ? [i.exp_thesis_d4] : [])], tags: ['DevSecOps', 'CI/CD', 'Threat Modeling', 'Vulnerability Analysis'], active: true, link: 'https://bth.diva-portal.org/smash/record.jsf?pid=diva2:2077800', linkLabel: lang === 'sv' ? '📄 Läs uppsatsen på DiVA' : '📄 Full thesis on DiVA' },
   { title: i.exp_trafikverket_title, company: i.exp_trafikverket_company, date: i.exp_trafikverket_date, details: [i.exp_trafikverket_d1, i.exp_trafikverket_d2, i.exp_trafikverket_d3], tags: ['Azure DevOps', 'PowerShell', 'JavaScript', 'CVE/CVSS', 'SBOM', 'CI/CD'], active: true },
 ];
 ---
@@ -66,6 +66,11 @@ const experiences = [
             <div class="flex flex-wrap gap-2">
               {exp.tags.map(tag => <span class="tag">{tag}</span>)}
             </div>
+            {exp.link && (
+              <a href={exp.link} target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs text-accent-400 hover:text-white transition-colors mt-3">
+                {exp.linkLabel} →
+              </a>
+            )}
           </div>
         </div>
       ))}
