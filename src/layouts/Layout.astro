@@ -280,5 +280,19 @@ const { lang, title } = Astro.props;
       rain();
     }
   </script>
+  <script>
+    import { inject } from '@vercel/analytics';
+    import { track } from '@vercel/analytics';
+    inject();
+
+    // Track CV downloads
+    document.addEventListener('click', (e) => {
+      const link = (e.target as HTMLElement).closest('a');
+      if (link && link.href && link.href.includes('CV_Software_Engineer')) {
+        const lang = link.href.includes('_EN.pdf') ? 'EN' : 'SW';
+        track('cv_download', { language: lang });
+      }
+    });
+  </script>
 </body>
 </html>
